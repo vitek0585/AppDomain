@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Class Name="Loader.PluginHost" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="2.5" />
+    <Members>
+      <Method Name="~PluginHost" Hidden="true" />
+      <Method Name="CreateDomain" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Property Name="Domain" Hidden="true" />
+      <Property Name="Loader" Hidden="true" />
+      <Property Name="Sponsor" Hidden="true" />
+      <Method Name="UnloadDomain" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EAFAQAAQACkAAAAAAAACABAAAgEQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PluginHost.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Loader.PluginLoader" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.75" Width="2.5" />
+    <Members>
+      <Method Name="~PluginLoader" Hidden="true" />
+      <Property Name="Assemblies" Hidden="true" />
+      <Property Name="ConstructorCache" Hidden="true" />
+      <Method Name="CreateInstance" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="GetConstructors" Hidden="true" />
+      <Method Name="GetImplementation" Hidden="true" />
+      <Method Name="GetImplementations" Hidden="true" />
+      <Field Name="mLog" Hidden="true" />
+      <Property Name="PluginDir" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAEARAAAACAAAAABGAAABAAAAAkAAAACAAACAAAAAAA=</HashCode>
+      <FileName>PluginLoader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Loader.Sponsor&lt;TInterface&gt;" BaseTypeListCollapsed="true">
+    <Position X="3.5" Y="1.25" Width="1.75" />
+    <Members>
+      <Method Name="~Sponsor" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="ISponsor.Renewal" Hidden="true" />
+      <Field Name="mInstance" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAACAAAAAAAAAAABAAAAAAgAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Sponsor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
