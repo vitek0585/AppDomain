@@ -24,7 +24,7 @@ namespace Program
             var reflectedAssembly = allDll.Select(Assembly.ReflectionOnlyLoadFrom).ToArray();
             foreach (var assembly in reflectedAssembly)
             {
-                Type[] types;
+                Type[] types = null;
                 try
                 {
                     types = assembly.GetTypes();
@@ -73,9 +73,9 @@ namespace Program
             var domainSetup = new AppDomainSetup
             {
                 ShadowCopyFiles = "true",
-                ShadowCopyDirectories = "true",
+                ShadowCopyDirectories = AppDomain.CurrentDomain.BaseDirectory,
                 ApplicationBase = pathToAssembly,
-                ApplicationName = applicationName ?? string.Empty
+                ApplicationName = applicationName ?? string.Empty,
             };
             CreateDomain(domainName, pathToAssembly, domainSetup, permissionSet);
         }
@@ -120,7 +120,7 @@ namespace Program
         {
             AppDomain domain;
             _createdDomains.TryGetValue(domainName, out domain);
-            return domain?.GetAssemblies();
+            return domain.ReflectionOnlyGetAssemblies();
         }
     }
 }

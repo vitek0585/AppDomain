@@ -24,29 +24,42 @@ namespace Program
             var typeAddin = manager.FindType(pathToPlugins, typeof(IPlugin));
             IPlugin instance;
             List<Task> tasks = new List<Task>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
             {
-                Task.Run(() =>
+                //Task.Run(() =>
+                //{
+
+                try
                 {
                     instance = manager.CreateInstanceInsideDomain<IPlugin>(DomainName, typeAddin);
+                    Console.WriteLine(instance.GetHashCode());
                     instance.Load();
                     Console.WriteLine(instance.GetAllPlugin());
-                });
-            }
-            for (int i = 0; i < 10; i++)
-            {
-                var t = Task.Run(() =>
+                }
+                catch (Exception e)
                 {
-                    manager.UnloadDomain(DomainName);
-                });
-                tasks.Add(t);
+                    Console.WriteLine(e);
+                }
+               // });
             }
-            Task.WhenAll(tasks).ContinueWith((t, o) =>
-            {
-                Console.WriteLine(manager.IsExistDomain(DomainName));
-            }, null);
-            PrintAllAssembly(AppDomain.CurrentDomain);
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    var t = Task.Run(() =>
+            //    {
+            //       // manager.UnloadDomain(DomainName);
+            //    });
+            //    tasks.Add(t);
+            //}
+            //Task.WhenAll(tasks).ContinueWith((t, o) =>
+            //{
+            //    Console.WriteLine(manager.IsExistDomain(DomainName));
+            //}, null);
             PrintAllAssembly(manager.GetAllAssembliesDomain(DomainName));
+
+
+            instance = manager.CreateInstanceInsideDomain<IPlugin>(DomainName, typeAddin);
+            instance.Load();
+            //PrintAllAssembly(AppDomain.CurrentDomain);
             Console.ReadKey();
         }
         //static void Main(string[] args)

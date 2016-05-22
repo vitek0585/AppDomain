@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonIterface
 {
-    public interface IPlugin 
+    public interface  IPlugin 
     {
         string GetAllPlugin();
         void Load();
