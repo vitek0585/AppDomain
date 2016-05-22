@@ -1,4 +1,4 @@
-﻿using ScoringEngine.Status;
+﻿using Program.Proxy.Status;
 
 namespace Program.Proxy
 {

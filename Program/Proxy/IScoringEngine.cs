@@ -1,6 +1,6 @@
 ﻿namespace Program.Proxy
 {
-    public interface IScoreEngine
+    public interface IScoringEngine
     {
         OperationResult TryCalculate(string data);
         OperationResult InitializeScoreCard(string scoreCard);

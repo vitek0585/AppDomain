@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using CredoLab.ExtractorContract;
-using ScoringEngine.ScoreModel;
+using Program.Proxy.Extractor;
+using Program.Proxy.ScoreModel;
 
-namespace ScoringEngine.Interfaces
+
+namespace Program.Proxy
 {
     public interface IScoreCalculate
     {

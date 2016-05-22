@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -41,23 +45,37 @@
     <Compile Include="AppDomainManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxy\IScoreEngine.cs" />
+    <Compile Include="Proxy\CalculateResult.cs" />
+    <Compile Include="Proxy\Extractor\Extend\ExtractorExtend.cs" />
+    <Compile Include="Proxy\Extractor\Extend\IExtractorExtend.cs" />
+    <Compile Include="Proxy\Extractor\ExtractorResult.cs" />
+    <Compile Include="Proxy\Extractor\ExtractorsContainer.cs" />
+    <Compile Include="Proxy\Extractor\IContainerManage.cs" />
+    <Compile Include="Proxy\Extractor\IExtractor.cs" />
+    <Compile Include="Proxy\Extractor\IExtractorsContainer.cs" />
+    <Compile Include="Proxy\IScoreCalculate.cs" />
+    <Compile Include="Proxy\IScoringEngine.cs" />
     <Compile Include="Proxy\OperationResult.cs" />
+    <Compile Include="Proxy\Rsa\RsaEncryption.cs" />
+    <Compile Include="Proxy\ScoreCalculator.cs" />
+    <Compile Include="Proxy\ScoreModel\ScoreCard.cs" />
+    <Compile Include="Proxy\ScoreModel\ScoreCardAttribute.cs" />
+    <Compile Include="Proxy\ScoreModel\ScoreCardExtentions.cs" />
+    <Compile Include="Proxy\ScoreModel\ScoreCardFeature.cs" />
     <Compile Include="Proxy\ScoringEngineProxy.cs" />
+    <Compile Include="Proxy\Status\OperationStatus.cs" />
+    <Compile Include="Proxy\TelcoScoringEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonIterface\CommonIterface.csproj">
       <Project>{796e42c2-afa3-452f-ab84-730deed727d4}</Project>
       <Name>CommonIterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScoringEngine\ScoringEngine.csproj">
-      <Project>{992CEB9E-172F-4E31-938F-FC1A3BB7E60D}</Project>
-      <Name>ScoringEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

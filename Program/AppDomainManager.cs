@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -22,14 +21,22 @@ namespace Program
         {
             var currentTypes = new List<Type>();
             var allDll = Directory.GetFiles(aseamblyPath, "*.dll");
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ad2_ReflectionOnlyAssemblyResolve;
             var reflectedAssembly = allDll.Select(Assembly.ReflectionOnlyLoadFrom).ToArray();
             foreach (var assembly in reflectedAssembly)
             {
-                foreach (var type in assembly.GetTypes())
+                Type[] types;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    types = e.Types;
+                }
+                foreach (var type in types.Where(t => t != null))
                 {
                     if (type.IsClass && type.IsAbstract == false
-                     && type.GetInterfaces().Any(@interface => @interface.GUID == interfaceType.GUID)
+                        && type.GetInterfaces().Any(@interface => @interface.GUID == interfaceType.GUID)
                         && typeof(MarshalByRefObject).IsAssignableFrom(type))
                     {
                         currentTypes.Add(type);
@@ -113,12 +120,7 @@ namespace Program
         {
             AppDomain domain;
             _createdDomains.TryGetValue(domainName, out domain);
-            return domain.GetAssemblies();
+            return domain?.GetAssemblies();
         }
-        private static Assembly ad2_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            return null;
-        }
-
     }
 }

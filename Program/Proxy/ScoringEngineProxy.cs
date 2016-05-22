@@ -11,28 +11,28 @@ namespace Program.Proxy
         static readonly string PathToAssembly = Path.Combine(Environment.CurrentDirectory, "plugins");
         private const string DomainName = "domain.scoringEngine";
 
-        private static IScoreEngine _scoreEngine;
+        private static IScoringEngine _scoringEngine;
         private static object _sharedObject = new object();
 
         private AppDomainManager _appDomainManager;
-        public IScoreEngine ScoringEngine
+        public IScoringEngine ScoringEngine
         {
             get
             {
-                if (_scoreEngine == null)
-                    _scoreEngine = CreateScoringEngine();
-                return _scoreEngine;
+                if (_scoringEngine == null)
+                    _scoringEngine = CreateScoringEngine();
+                return _scoringEngine;
             }
         }
 
-        private IScoreEngine CreateScoringEngine()
+        private IScoringEngine CreateScoringEngine()
         {
             lock (_sharedObject)
             {
                 if (!_appDomainManager.IsExistDomain(DomainName))
                     _appDomainManager.CreateNonTrustDomain(DomainName, PathToAssembly);
-                var typeOfScoreEngine = _appDomainManager.FindType(PathToAssembly, typeof(IScoreEngine));
-                _scoreEngine = _appDomainManager.CreateInstanceInsideDomain<IScoreEngine>(DomainName, typeOfScoreEngine);
+                var typeOfScoreEngine = _appDomainManager.FindType(PathToAssembly, typeof(IScoringEngine));
+                _scoringEngine = _appDomainManager.CreateInstanceInsideDomain<IScoringEngine>(DomainName, typeOfScoreEngine);
             }
             return null;
         }
@@ -44,7 +44,7 @@ namespace Program.Proxy
 
         public OperationResult TryCalculate(string data)
         {
-            return null;
+            return _scoringEngine.TryCalculate(data);
         }
 
         public OperationResult InitializeScoreCard(string scoreCard)

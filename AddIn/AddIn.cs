@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using CommonIterface;
@@ -25,10 +26,25 @@ namespace AddIn
         {
             foreach (var extr in _extractors)
             {
-                Console.WriteLine("sdfsfsdfsdfsdf");
+                Console.WriteLine("1.0.0.1");
                 Console.WriteLine(extr.GetAll());
             }
-            return string.Empty;
+            HttpClient client = new HttpClient();
+            try
+            {
+                Console.WriteLine("Send");
+
+                var res =  client.GetAsync("http://www.infoworld.com/article/3018997/application-development/working-with-application-domains-in-net.html").Result;
+                var t = res.Content.ReadAsStringAsync().Result.Length;
+                Console.WriteLine("End");
+
+                return t.ToString()+" length";
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

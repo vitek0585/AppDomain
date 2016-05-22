@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoringEngine", "ScoringEng
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CredoLab.ExtractorContract", "CredoLab.ExtractorContract\CredoLab.ExtractorContract.csproj", "{86F740D6-1DA2-4FF1-9667-6EBB561B3176}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{EB454FF1-74CC-4700-9D78-23B4BA94692D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +158,18 @@ Global
 		{86F740D6-1DA2-4FF1-9667-6EBB561B3176}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{86F740D6-1DA2-4FF1-9667-6EBB561B3176}.Release|x86.ActiveCfg = Release|Any CPU
 		{86F740D6-1DA2-4FF1-9667-6EBB561B3176}.Release|x86.Build.0 = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Debug|x86.Build.0 = Debug|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,5 +184,6 @@ Global
 		{C8FADCA4-86CD-4B61-8BF6-4D15B7714421} = {5F0DA7FB-0004-44F1-9958-660439F74F17}
 		{992CEB9E-172F-4E31-938F-FC1A3BB7E60D} = {5F0DA7FB-0004-44F1-9958-660439F74F17}
 		{86F740D6-1DA2-4FF1-9667-6EBB561B3176} = {5F0DA7FB-0004-44F1-9958-660439F74F17}
+		{EB454FF1-74CC-4700-9D78-23B4BA94692D} = {5F0DA7FB-0004-44F1-9958-660439F74F17}
 	EndGlobalSection
 EndGlobal
