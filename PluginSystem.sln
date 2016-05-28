@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewAddIn", "NewAddIn\NewAddIn.csproj", "{E2120016-EE9B-4CCF-A01A-3545F7453E5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainManager", "DomainManager\DomainManager.csproj", "{BF23789C-2B79-497E-B5E5-D628941E9B58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,6 +172,18 @@ Global
 		{E2120016-EE9B-4CCF-A01A-3545F7453E5C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E2120016-EE9B-4CCF-A01A-3545F7453E5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2120016-EE9B-4CCF-A01A-3545F7453E5C}.Release|x86.Build.0 = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Debug|x86.Build.0 = Debug|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|x86.ActiveCfg = Release|Any CPU
+		{BF23789C-2B79-497E-B5E5-D628941E9B58}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
