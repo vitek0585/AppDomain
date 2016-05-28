@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,17 +10,17 @@ using System.Security.Permissions;
 
 namespace Program
 {
-    public class AppDomainManager
+    public class DomainManager
     {
-        private static ConcurrentDictionary<string, AppDomain> _createdDomains;
+        private static readonly ConcurrentDictionary<string, AppDomain> CreatedDomains;
 
-        static AppDomainManager()
+        static DomainManager()
         {
-            _createdDomains = new ConcurrentDictionary<string, AppDomain>();
+            CreatedDomains = new ConcurrentDictionary<string, AppDomain>();
         }
-        public IEnumerable<Type> FindTypes(string aseamblyPath, Type interfaceType)
+        public IEnumerable<Type> GetTypes(string aseamblyPath, Type interfaceType)
         {
-            var currentTypes = new List<Type>();
+            var findedTypes = new List<Type>();
             var allDll = Directory.GetFiles(aseamblyPath, "*.dll");
             var reflectedAssembly = allDll.Select(Assembly.ReflectionOnlyLoadFrom).ToArray();
             foreach (var assembly in reflectedAssembly)
@@ -35,35 +36,35 @@ namespace Program
                 }
                 foreach (var type in types.Where(t => t != null))
                 {
-                    if (type.IsClass && type.IsAbstract == false
+                    if (type.IsClass && !type.IsAbstract
                         && type.GetInterfaces().Any(@interface => @interface.GUID == interfaceType.GUID)
                         && typeof(MarshalByRefObject).IsAssignableFrom(type))
                     {
-                        currentTypes.Add(type);
+                        findedTypes.Add(type);
                     }
                 }
             }
-            return currentTypes;
+            return findedTypes;
         }
-        public Type FindType(string aseamblyPath, Type interfaceType)
+        public Type GetType(string assemblyPath, Type interfaceType)
         {
-            var types = FindTypes(aseamblyPath, interfaceType);
-            if (types.Any())
+            var findedTypes = GetTypes(assemblyPath, interfaceType).ToList();
+            if (findedTypes.Any())
             {
-                Type maxVersionType = types.First();
-                foreach (var type in types)
+                Type actualType = findedTypes.First();
+                foreach (var type in findedTypes)
                 {
-                    if (maxVersionType.Assembly.GetName().Version
+                    if (actualType.Assembly.GetName().Version
                         .CompareTo(type.Assembly.GetName().Version) < 0)
                     {
-                        maxVersionType = type;
+                        actualType = type;
                     }
                 }
-                return maxVersionType;
+                return actualType;
             }
             return null;
         }
-        public void CreateNonTrustDomain(string domainName, string pathToAssembly, string applicationName = null)
+        public void CreateNonTrustedDomain(string domainName, string pathToAssembly, string applicationBasePath = null, string applicationName = null)
         {
             var permissionSet = new PermissionSet(PermissionState.None);
             permissionSet.AddPermission(new SecurityPermission(SecurityPermissionFlag.Execution));
@@ -74,53 +75,74 @@ namespace Program
             {
                 ShadowCopyFiles = "true",
                 ShadowCopyDirectories = AppDomain.CurrentDomain.BaseDirectory,
-                ApplicationBase = pathToAssembly,
+                ApplicationBase = applicationBasePath ?? AppDomain.CurrentDomain.BaseDirectory,
                 ApplicationName = applicationName ?? string.Empty,
+                PrivateBinPath = pathToAssembly
             };
             CreateDomain(domainName, pathToAssembly, domainSetup, permissionSet);
         }
 
-        public bool IsExistDomain(string domainName)
+        public bool IsDomainExist(string domainName)
         {
-            return _createdDomains.ContainsKey(domainName);
+            lock (CreatedDomains)
+            {
+                return CreatedDomains.ContainsKey(domainName);
+            }
         }
+
         public void CreateDomain(string domainName, string pathToAssembly, AppDomainSetup appDomainSetup, PermissionSet permissionSet)
         {
-            if (_createdDomains.ContainsKey(domainName))
+            lock (CreatedDomains)
             {
-                throw new ArgumentException("Domain name already exists inside current process");
+                if (CreatedDomains.ContainsKey(domainName))
+                {
+                    throw new ArgumentException("Domain name already exists inside current process");
+                }
+                if (string.IsNullOrWhiteSpace(domainName))
+                {
+                    throw new ArgumentException("Domain name can not be null");
+                }
+                var createdDomain = AppDomain.CreateDomain(domainName, null, appDomainSetup, permissionSet);
+                createdDomain.DomainUnload += DomainUnload;
+                CreatedDomains.TryAdd(domainName, createdDomain);
             }
-            if (string.IsNullOrWhiteSpace(domainName))
-            {
-                throw new ArgumentException("Domain name can not be null");
-            }
-            var createdDomain = AppDomain.CreateDomain(domainName, null, appDomainSetup, permissionSet);
-            _createdDomains.TryAdd(domainName, createdDomain);
         }
 
-        public TInstance CreateInstanceInsideDomain<TInstance>(string domainName, Type typeOfInstance) where TInstance : class
+        private static void DomainUnload(object sender, EventArgs e)
+        {
+            if (sender is AppDomain)
+            {
+                var unloadedDomain = sender as AppDomain;
+                var deletedDomain = CreatedDomains.FirstOrDefault(domain => domain.Value.Id == unloadedDomain.Id);
+                if (deletedDomain.Value != null)
+                {
+                    AppDomain removedDomain;
+                    CreatedDomains.TryRemove(unloadedDomain.FriendlyName, out removedDomain);
+                }
+            }
+        }
+
+        public TInstance CreateInstanceInsideDomain<TInstance>(string domainName, Type typeOfInstance, params object[] ctorParameters) where TInstance : class
         {
             AppDomain domain;
-            _createdDomains.TryGetValue(domainName, out domain);
-            return domain?.CreateInstanceAndUnwrap(typeOfInstance.Assembly.GetName().Name, typeOfInstance.FullName) as TInstance;
+            CreatedDomains.TryGetValue(domainName, out domain);
+            return domain?.CreateInstanceAndUnwrap(typeOfInstance.Assembly.GetName().Name, typeOfInstance.FullName, true, BindingFlags.Default, null, ctorParameters, CultureInfo.InvariantCulture, null) as TInstance;
         }
 
-        public void UnloadDomain(string domainName)
+        public static void UnloadDomain(string domainName)
         {
-            AppDomain removedDomain;
-            _createdDomains.TryGetValue(domainName, out removedDomain);
-            if (removedDomain != null)
+            lock (CreatedDomains)
             {
-                AppDomain.Unload(removedDomain);
-                _createdDomains.TryRemove(domainName, out removedDomain);
+                AppDomain removedDomain;
+                CreatedDomains.TryGetValue(domainName, out removedDomain);
+                if (removedDomain != null)
+                {
+                    var nameRemovedDomain = removedDomain.FriendlyName;
+                    AppDomain.Unload(removedDomain);
+                    CreatedDomains.TryRemove(nameRemovedDomain, out removedDomain);
+                }
             }
         }
 
-        public Assembly[] GetAllAssembliesDomain(string domainName)
-        {
-            AppDomain domain;
-            _createdDomains.TryGetValue(domainName, out domain);
-            return domain.ReflectionOnlyGetAssemblies();
-        }
     }
 }

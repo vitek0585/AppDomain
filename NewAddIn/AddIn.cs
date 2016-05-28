@@ -4,6 +4,8 @@ using System.Collections.Generic;
 //using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CommonIterface;
@@ -35,10 +37,10 @@ namespace AddIn
             HttpClient client = new HttpClient();
             try
             {
-                Console.WriteLine("Send");
+                Console.WriteLine("Send {0}",Assembly.GetExecutingAssembly().GetName().Version);
 
-                var res = client.GetAsync("http://www.infoworld.com/article/3018997/application-development/working-with-application-domains-in-net.html").Result;
-                var t = res.Content.ReadAsStringAsync().Result.Length;
+                //var res = client.GetAsync("http://www.infoworld.com/article/3018997/application-development/working-with-application-domains-in-net.html").Result;
+                //var t = res.Content.ReadAsStringAsync().Result.Length;
                 Console.WriteLine("End");
 
                // return t.ToString() + " length";

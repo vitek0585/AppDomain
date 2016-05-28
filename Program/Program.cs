@@ -19,9 +19,9 @@ namespace Program
         static string DomainName = "MyDomain";
         static void Main(string[] args)
         {
-            AppDomainManager manager = new AppDomainManager();
-            manager.CreateNonTrustDomain(DomainName, pathToPlugins);
-            var typeAddin = manager.FindType(pathToPlugins, typeof(IPlugin));
+            var manager = new DomainManager();
+            manager.CreateNonTrustedDomain(DomainName, pathToPlugins,AppDomain.CurrentDomain.FriendlyName);
+            var typeAddin = manager.GetType(pathToPlugins, typeof(IPlugin));
             IPlugin instance;
             List<Task> tasks = new List<Task>();
             for (int i = 0; i < 2; i++)
@@ -42,6 +42,17 @@ namespace Program
                 }
                // });
             }
+            try
+            {
+                DomainManager.UnloadDomain(DomainName);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            manager.CreateNonTrustedDomain(DomainName, pathToPlugins, AppDomain.CurrentDomain.FriendlyName);
+            instance = manager.CreateInstanceInsideDomain<IPlugin>(DomainName, typeAddin);
+            Console.WriteLine(instance.GetHashCode());
             //for (int i = 0; i < 10; i++)
             //{
             //    var t = Task.Run(() =>
@@ -54,11 +65,10 @@ namespace Program
             //{
             //    Console.WriteLine(manager.IsExistDomain(DomainName));
             //}, null);
-            PrintAllAssembly(manager.GetAllAssembliesDomain(DomainName));
 
 
-            instance = manager.CreateInstanceInsideDomain<IPlugin>(DomainName, typeAddin);
-            instance.Load();
+            //instance = manager.CreateInstanceInsideDomain<IPlugin>(DomainName, typeAddin);
+            //instance.Load();
             //PrintAllAssembly(AppDomain.CurrentDomain);
             Console.ReadKey();
         }

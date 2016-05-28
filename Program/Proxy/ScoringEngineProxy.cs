@@ -14,7 +14,7 @@ namespace Program.Proxy
         private static IScoringEngine _scoringEngine;
         private static object _sharedObject = new object();
 
-        private AppDomainManager _appDomainManager;
+        private DomainManager _appDomainManager;
         public IScoringEngine ScoringEngine
         {
             get
@@ -29,9 +29,9 @@ namespace Program.Proxy
         {
             lock (_sharedObject)
             {
-                if (!_appDomainManager.IsExistDomain(DomainName))
-                    _appDomainManager.CreateNonTrustDomain(DomainName, PathToAssembly);
-                var typeOfScoreEngine = _appDomainManager.FindType(PathToAssembly, typeof(IScoringEngine));
+                if (!_appDomainManager.IsDomainExist(DomainName))
+                    _appDomainManager.CreateNonTrustedDomain(DomainName, PathToAssembly);
+                var typeOfScoreEngine = _appDomainManager.GetType(PathToAssembly, typeof(IScoringEngine));
                 _scoringEngine = _appDomainManager.CreateInstanceInsideDomain<IScoringEngine>(DomainName, typeOfScoreEngine);
             }
             return null;
